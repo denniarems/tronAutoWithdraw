@@ -12,23 +12,31 @@ async function app(to, from, privatekey) {
     },
     privatekey
   );
-  var accountDt = await tronWeb.trx.getAccount(from);
-  var bttBalance = accountDt.assetV2.find(getBTTBalance).value;
+  const accountDt = await tronWeb.trx.getAccount(from);
+  console.log(`Log =>: app -> accountDt`, accountDt);
+  const bttBalance = accountDt.assetV2.find(getBTTBalance).value;
+  console.log(`Log =>: app -> bttBalance`, bttBalance);
   if (bttBalance > 900000) {
-    var data = await tronWeb.transactionBuilder.sendToken(
+    const data = await tronWeb.transactionBuilder.sendToken(
       to,
       bttBalance,
       '1002000',
       from
     );
     const signedtxn = await tronWeb.trx.sign(data, privatekey);
+    console.log(`Log =>: app -> signedtxn`, signedtxn);
     await tronWeb.trx.sendRawTransaction(signedtxn);
   }
 }
-const interval = setInterval(function () {
-  app(
-    'to address',
-    'from address',
-    'private key'
-  );
-}, 10000);
+const to = process.env.TO 
+const froms = (process.env.FROM).split(',');
+const keys = (process.env.KEY).split(',');
+for (const [i, key] of keys.entries()) {
+  const interval = setInterval(function () {
+    app(
+      to,
+      froms[i],
+      key
+    );
+  }, 10000);
+}
