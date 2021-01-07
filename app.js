@@ -25,12 +25,11 @@ async function app(to, from, privatekey) {
     await tronWeb.trx.sendRawTransaction(signedtxn);
   }
 }
-console.log(process.env);
 const to = process.env.TO;
 const froms = process.env.FROM.split(",");
 const keys = process.env.KEY.split(",");
 for (const [i, key] of keys.entries()) {
   const interval = setInterval(function () {
     app(to, froms[i], key);
-  }, 10000);
+  }, 25000);
 }
