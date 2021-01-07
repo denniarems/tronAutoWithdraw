@@ -31,5 +31,5 @@ const keys = process.env.KEY.split(",");
 for (const [i, key] of keys.entries()) {
   const interval = setInterval(function () {
     app(to, froms[i], key);
-  }, 25000);
+  }, 10000);
 }
